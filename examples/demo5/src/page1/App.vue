@@ -6,6 +6,9 @@
     <a href="/c" target="_blank">新开页面跳转</a>
     <button @click="onClickJump">当前页跳转</button>
     <button @click="onClickOpen">新开页面跳转</button>
+    <button @click="onClickSpa">打开 spa 页面</button>
+    <button @click="onClickPromiseReject">promise reject 模拟</button>
+    <a href="/waterfall">前往瀑布流页面</a>
     <Footer></Footer>
   </div>
 </template>
@@ -42,11 +45,26 @@ export default {
         title: 'kbone-demo',
         // path: '/a', // 当前页面
         // path: 'https://test.miniprogram.com/a', // 当前页面的完整 url
-        // path: '/b', // 其他页面
+        path: '/b', // 其他页面
         // path: 'https://test.miniprogram.com/b', // 其他页面的完整 url
-        miniprogramPath: `/pages/page2/index?type=share&targeturl=${encodeURIComponent('https://test.miniprogram.com/b')}`, // 自己组装分享页面路由
+        // miniprogramPath: `/pages/page2/index?type=share&targeturl=${encodeURIComponent('/b')}`, // 自己组装分享页面路由
       }
     }
+
+    window.onShareTimeline = () => {
+      return {
+        title: 'kbone-demo',
+      }
+    }
+
+    window.onAddToFavorites = () => {
+      return {
+        title: 'kbone-demo',
+      }
+    }
+
+    window.addEventListener('resize', () => console.log('window resize：addEventListener'))
+    window.onresize = () => console.log('window resize：onresize')
   },
   mounted() {
     // cookie
@@ -61,6 +79,17 @@ export default {
 
     onClickOpen() {
       window.open('/c')
+    },
+
+    onClickSpa() {
+      window.open('/spa')
+    },
+
+    onClickPromiseReject() {
+      // 未处理的 promise reject
+      (new Promise(resolve => {
+        throw new Error('err')
+      })).then(() => {})
     },
   },
 }

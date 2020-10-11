@@ -1,5 +1,113 @@
 # 更新日志
 
+## 2.1.4
+
+* 兼容 XMLHttpRequest 对象请求响应时页面已被销毁的问题
+
+## 2.1.3
+
+* 支持 map 组件的自定义 callout
+
+## 2.1.2
+
+* 支持 XMLHttpRequest 对象的 withCredentials 属性
+
+## 2.1.1
+
+* 修复 canvas 默认宽高问题
+
+## 2.1.0
+
+* 扩展方法支持 XMLHttpRequest 对象
+
+## 2.0.11
+
+* 支持 worker/sharedWorker
+* 修复 dom 查找 api 不支持 html 标签的问题
+
+## 2.0.10
+
+* 修复 cloneNode 没有复制 attribute 对象的问题
+
+## 2.0.9
+
+* 支持特殊属性 kbone-attribute-map/kbone-event-map
+* 修复 scroll-into-view 在初始化时设置不生效问题
+
+## 2.0.8
+
+* 支持 match-media/voip-room 内置组件
+
+## 2.0.7
+
+* 修复无法触发其他已打开 tabbar 页面 storage 事件的问题
+
+## 2.0.6
+
+* scroll-view 内置组件改为 v2.x 渲染模式
+
+## 2.0.3
+
+* 提供 sourcemap
+
+## 2.0.2
+
+* 元素节点提供 $$wxComponent 属性
+
+## 2.0.0
+
+* 更新内置组件渲染模式，使用自定义组件的 virtual host 特性进行渲染
+* 更新第三方自定义组件渲染模式，使用自定义组件的 virtual host 特性进行渲染
+
+## 1.5.0
+
+* 压缩混淆代码
+* 在页面 unload 之后不允许发起请求
+
+## 1.4.6
+
+* 修复特殊 dom 结构会造成死循环的问题
+
+## 1.4.5
+
+* 补充部分 border 相关属性到样式列表中
+
+## 1.4.4
+
+* 支持 select/option 标签
+
+## 1.4.3
+
+* 支持 document.documentElement.scrollTop
+* 对生成 innerHTML/outerHTML 时节点属性值里 `"` 进行实体字符替换
+
+## 1.4.2
+
+* 修复部分内置组件第一级子节点更新不正确的问题
+
+## 1.4.1
+
+* 对已经执行过 $$prepare 的 canvas 节点读取 width/height，直接从小程序节点中读取
+* 修复 canvas style 被改变时，会强制将 width/height 设置在 node 对象上的问题
+
+## 1.4.0
+
+* 因工具调试面板 sourcemap 处理相关问题，撤销文件合并打包操作
+* 对已经执行过 $$prepare 的 canvas 节点设置 width/height 不再将其写入到 style 中
+
+## 1.3.1
+
+* 修复生成的代码无法通过代码保护的问题
+
+## 1.3.0
+
+* 对源文件进行合并打包操作
+
+## 1.2.10
+
+* 设置 location.herf 和调用 location.replace 不触发页面刷新时，需要检测 hashchange
+* 调用 history.back/history.forward/history.go 时，需要检测 hashchange
+
 ## 1.2.7
 
 * 支持 document.visibilityState

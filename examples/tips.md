@@ -24,6 +24,8 @@
 * 使用 wx-xxx 来渲染内置组件
 * 无前缀直接渲染内置组件
 * app.wxss 输出配置
+* 监听页面滚动
+* 加载视图
 
 ## demo5
 
@@ -33,7 +35,10 @@
 * 监听小程序页面生命周期
 * 监听小程序 app 生命周期
 * cookie 存储在内存中
-* 页面分享
+* 页面转发
+* 分享朋友圈
+* 页面收藏
+* setData 模式
 
 ## demo7
 
@@ -98,8 +103,8 @@
 
 * vue
 * 多页
-* 分包
 * 混合到原生小程序中
+* kbone 页面使用独立分包
 
 ## demo22
 
@@ -110,3 +115,28 @@
 * 跨页面数据共享
 * localStorage
 * sessionStorage
+
+## demo23
+
+* vue
+* 单页
+* vue-router
+* hash mode
+
+## demo24
+
+* react
+* 多页
+
+## demo25
+
+* vue
+* 多页
+* 分包
+* worker
+* sharedWorker
+
+## demo26
+
+* vue3
+* 多页

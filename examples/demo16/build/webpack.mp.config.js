@@ -86,7 +86,11 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx', '.json']
+        extensions: ['*', '.js', '.jsx', '.json'],
+        alias: {
+            react: isOptimize ? 'react/index.js' : 'react/umd/react.development.js',
+            'react-dom': isOptimize ? 'react-dom/index.js' : 'react-dom/umd/react-dom.development.js',
+        },
     },
     plugins: [
         new webpack.DefinePlugin({

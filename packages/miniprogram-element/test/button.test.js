@@ -78,8 +78,14 @@ test('button', async() => {
     // businessId
     await _.checkString(body, node, 'businessId', 'business-id', '')
 
+    // shareType
+    await _.checkNumber(body, node, 'shareType', 'share-type', 27)
+
+    // shareMode
+    await _.checkArray(body, node, 'shareMode', 'share-mode', undefined, ['qq', 'qzone'])
+
     // event
-    await _.checkEvent(body.querySelector('.h5-wx-component'), node, ['getuserinfo', 'contact', 'getphonenumber', 'error', 'opensetting', 'launchapp'])
+    await _.checkEvent(body.querySelector('.h5-wx-component'), node, ['getuserinfo', 'contact', 'getphonenumber', 'error', 'opensetting', 'launchapp', 'getrealnameauthinfo'])
 
     page.document.body.removeChild(node)
     document.body.removeChild(wrapper)

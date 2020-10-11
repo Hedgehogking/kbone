@@ -61,15 +61,20 @@ class HTMLCanvasElement extends Element {
     $$prepare() {
         return new Promise((resolve, reject) => {
             this.$$getNodesRef().then(nodesRef => nodesRef.node(res => {
+                const {width, height} = this
                 this.$_node = res.node
 
                 // 设置 canvas 宽高
-                this.$_node.width = this.width
-                this.$_node.height = this.height
+                this.$_node.width = width
+                this.$_node.height = height
 
                 resolve(this)
             }).exec()).catch(reject)
         })
+    }
+
+    get $$node() {
+        return this.$_node
     }
 
     /**
@@ -89,11 +94,9 @@ class HTMLCanvasElement extends Element {
 
         if (typeof width === 'number' && width >= 0) {
             this.$_style.width = `${width}px`
-            if (this.$_node) this.$_node.width = width
         }
         if (typeof height === 'number' && height >= 0) {
             this.$_style.height = `${height}px`
-            if (this.$_node) this.$_node.height = height
         }
     }
 
@@ -101,25 +104,27 @@ class HTMLCanvasElement extends Element {
      * 对外属性和方法
      */
     get width() {
-        return +this.$_attrs.get('width') || 0
+        if (this.$_node) return this.$_node.width
+        else return +this.$_attrs.get('width') || 0
     }
 
     set width(value) {
         if (typeof value !== 'number' || !isFinite(value) || value < 0) return
 
-        this.$_attrs.set('width', value)
-        this.$_initRect()
+        if (this.$_node) this.$_node.width = value
+        else this.$_attrs.set('width', value)
     }
 
     get height() {
-        return +this.$_attrs.get('height') || 0
+        if (this.$_node) return this.$_node.height
+        else return +this.$_attrs.get('height') || 0
     }
 
     set height(value) {
         if (typeof value !== 'number' || !isFinite(value) || value < 0) return
 
-        this.$_attrs.set('height', value)
-        this.$_initRect()
+        if (this.$_node) this.$_node.height = value
+        else this.$_attrs.set('height', value)
     }
 
     getContext(type) {

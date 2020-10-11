@@ -1,5 +1,145 @@
 # 更新日志
 
+## 2.1.14
+
+* 第三方自定义组件部分兼容旧版本的 mp-webpack-plugin
+
+## 2.1.13
+
+* 修复使用第三方自定义组件不支持 name 属性问题（依赖升级：mp-webpack-plugin@1.1.12 以上）
+
+## 2.1.12
+
+* 支持 map 组件的自定义 callout
+
+## 2.1.11
+
+* 修复 textarea 的 placeholder-class 的默认值为 textarea-placeholder
+
+## 2.1.10
+
+* 修复 picker-view-column 下的第一层子节点无法更新的问题
+
+## 2.1.9
+
+* 修复 setDataMode 为 original 时进行 diff 没有对比当前最新值的问题
+* 补充 diff 时值相等判断函数中关于对象/数组判断的逻辑
+
+## 2.1.8
+
+* 修复 diff 可被手动改变的属性时没有对比当前最新值的问题
+
+## 2.1.5
+
+* 修复小范围更新可能出现 “type of null” 问题
+
+## 2.1.4
+
+* 修复小范围更新可能设置值为 undefined 的问题
+
+## 2.1.1
+
+* 强制更新值判断使用非严格相等判断，以修复部分情况下组件在初始状态被强制更新的问题
+
+## 2.1.0
+
+* 优化 setData
+
+## 2.0.13
+
+* 支持 qq 小程序 button 内置组件的 share-type/share-mode 属性
+
+## 2.0.11
+
+* 支持 match-media/voip-room 内置组件
+* 内置组件布尔值属性支持设置 'false' 字符串来表示 false 值
+
+## 2.0.9
+
+* scroll-view 内置组件改为 v2.x 渲染模式
+
+## 2.0.6
+
+* 修复 cover-view 内置组件渲染不正确问题
+
+## 2.0.5
+
+* 提供 sourcemap
+
+## 2.0.2
+
+* 元素节点提供 $$wxComponent 属性
+
+## 2.0.1
+
+* 修复 picker-view-column 的高度计算错误问题
+* 使用 view/image 代替 cover-view/cover-image 渲染 live-player、live-pusher、camera 的子节点
+
+## 2.0.0
+
+* 更新内置组件渲染模式，使用自定义组件的 virtual host 特性进行渲染
+* 更新第三方自定义组件渲染模式，使用自定义组件的 virtual host 特性进行渲染
+
+## 1.5.0
+
+* 第三方自定义组件改为 v1.x 渲染模式
+* text/picker-view 内置组件改为 v1.x 渲染模式
+* 压缩混淆代码
+
+## 1.4.5
+
+* 修复特殊 dom 结构会造成死循环的问题
+
+## 1.4.4
+
+* 修复内置组件 view 的 
+
+## 1.4.3
+
+* 支持 button 的 getrealnameauthinfo 事件 hover-start-time 参数不生效问题
+* 支持 longpress 事件
+
+## 1.4.2
+
+* 支持 select/option 标签
+
+## 1.4.1
+
+* 升级内置组件，对齐到基础库 2.11.0 版本文档
+* 修复部分内置组件第一级子节点更新不正确的问题
+
+## 1.4.0
+
+* 因工具调试面板 sourcemap 处理相关问题，撤销文件合并打包操作
+
+## 1.3.1
+
+* 修复生成的代码无法通过代码保护的问题
+
+## 1.3.0
+
+* 对源文件进行合并打包操作
+
+## 1.2.17
+
+* 支持 canvas 的 disable-event 属性
+
+## 1.2.16
+
+* 修复 canvas touchxxx 事件和 canvastouchxxx 事件冲突问题
+
+## 1.2.12
+
+* 修复 picker 子节点更新失败问题
+
+## 1.2.10
+
+* 补充 map 的 regionchange 事件中的 causedBy 字段
+
+## 1.2.9
+
+* map 的部分字段支持传入 json 串，以兼容 react
+
 ## 1.2.8
 
 * 兼容基础库中 button 组件设置 type 默认值引入的样式优先级问题

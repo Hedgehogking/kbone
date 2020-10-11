@@ -1,5 +1,70 @@
 # 更新日志
 
+## 1.1.14
+
+* 支持 packageConfigOverride 配置
+
+## 1.1.13
+
+* 支持分包插件配置
+
+## 1.1.12
+
+* 修复使用第三方自定义组件不支持 name 属性问题（依赖升级：miniprogram-element@2.1.13 以上）
+
+## 1.1.10
+
+* autoBuildNpm 修改为优先拷贝 dist 目录
+
+## 1.1.9
+
+* `*` 号选择器实现方式改成可选配置（optimization.wxssUniversalSelector）
+
+## 1.1.8
+
+* `*` 号选择器改为 class 前缀选择器实现
+
+## 1.1.6
+
+* 支持 worker/sharedWorker
+
+## 1.1.4
+
+* 支持第三方自定义组件/自定义 tabbar/loading view 目录的 watch
+
+## 1.1.3
+
+* 兼容低版本基础库转发/分享朋友圈接口
+
+## 1.1.2
+
+* 支持 loadingViewName 配置
+
+## 1.1.1
+
+* 支持 kbone 渲染前的加载视图
+* 抽取 page js 文件中的公共代码
+
+## 1.1.0
+
+* 支持页面的 onShareTimeline/onAddToFavorites/onResize/onTabItemTap 事件
+
+## 1.0.1
+
+* 支持 generate.appEntryInject
+
+## 0.9.16
+
+* 支持配置 miniprogram-render / miniprogram-element 的版本
+
+## 0.9.15
+
+* 支持 document.documentElement.scrollTop
+
+## 0.9.14
+
+* 支持 window.$$getOpenerEventChannel
+
 ## 0.9.12
 
 * 支持 document 的 visibilitychange 事件

@@ -52,9 +52,7 @@ function throttle(func) {
                 waitFuncSet.delete(func)
                 func()
             }
-        }).catch(() => {
-            // ignore
-        })
+        }).catch(console.error)
     }
 }
 
@@ -109,6 +107,13 @@ function isTagNameSupport(tagName) {
     return NOT_SUPPORT_TAG_NAME_LIST.indexOf(tagName) === -1
 }
 
+/**
+ * 处理 innerHTML/outerHTML 的属性值过滤
+ */
+function escapeForHtmlGeneration(value) {
+    return value.replace(/"/g, '&quot;')
+}
+
 module.exports = {
     toDash,
     toCamel,
@@ -120,4 +125,5 @@ module.exports = {
     completeURL,
     decodeContent,
     isTagNameSupport,
+    escapeForHtmlGeneration,
 }

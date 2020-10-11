@@ -12,7 +12,8 @@ const {
 function checkComponentAttr({props = []}, name, domNode, destData, oldData) {
     if (props.length) {
         for (const name of props) {
-            const newValue = domNode.getAttribute(name)
+            let newValue = domNode.getAttribute(name)
+            newValue = newValue !== undefined ? newValue : null
             if (!oldData || oldData[name] !== newValue) destData[name] = newValue
         }
     }
@@ -28,13 +29,14 @@ function checkComponentAttr({props = []}, name, domNode, destData, oldData) {
 
 Component({
     properties: {
-        name: {
+        kboneCustomComponentName: {
             type: String,
             value: '',
         },
     },
     options: {
         addGlobalClass: true, // 开启全局样式
+        virtualHost: true, // 开启虚拟化 host
     },
     attached() {
         const nodeId = this.dataset.privateNodeId
@@ -53,8 +55,8 @@ Component({
 
         // 监听全局事件
         this.onSelfNodeUpdate = tool.throttle(this.onSelfNodeUpdate.bind(this))
-        this.domNode.$$clearEvent('$$domNodeUpdate')
-        this.domNode.addEventListener('$$domNodeUpdate', this.onSelfNodeUpdate)
+        this.domNode.$$clearEvent('$$domNodeUpdate', {$$namespace: 'proxy'})
+        this.domNode.addEventListener('$$domNodeUpdate', this.onSelfNodeUpdate, {$$namespace: 'proxy'})
 
         // 监听自定义组件事件
         const {events = []} = this.compConfig

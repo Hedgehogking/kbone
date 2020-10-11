@@ -30,7 +30,7 @@ test('textarea', async() => {
     await _.checkString(body, node, 'placeholderStyle', 'placeholder-style', '')
 
     // placeholderClass
-    await _.checkString(body, node, 'placeholderClass', 'placeholder-class', 'input-placeholder')
+    await _.checkString(body, node, 'placeholderClass', 'placeholder-class', 'textarea-placeholder')
 
     // disabled
     await _.checkBoolean(body, node, 'disabled', 'disabled', false)
@@ -73,6 +73,12 @@ test('textarea', async() => {
 
     // adjustPosition
     await _.checkBoolean(body, node, 'adjustPosition', 'adjust-position', true)
+
+    // hold-keyboard
+    await _.checkBoolean(body, node, 'holdKeyboard', 'hold-keyboard', false)
+
+    // disable-default-padding
+    await _.checkBoolean(body, node, 'disableDefaultPadding', 'disable-default-padding', false)
 
     // event
     await _.checkEvent(body.querySelector('.h5-textarea'), node, ['focus', 'blur', 'linechange', 'input', 'confirm', 'keyboardheightchange'])

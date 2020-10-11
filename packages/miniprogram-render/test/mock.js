@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const render = require('../src')
 
 const config = {
@@ -16,6 +18,9 @@ const config = {
             {regexp: '^\\/index\\/aaa\\/detail\\/([^\\/]+?)(?:\\/)?$', options: 'i'},
             {regexp: '^\\/index\\/bbb\\/detail\\/([^\\/]+?)(?:\\/)?$', options: 'i'}
         ],
+    },
+    generate: {
+        worker: true,
     },
     runtime: {
         subpackagesMap: {},
@@ -54,7 +59,7 @@ const config = {
         domExtendMultiplexing: true,
         styleValueReduce: 1000,
         attrValueReduce: 1000,
-    }
+    },
 }
 
 const html = `<div class="aa">
@@ -72,6 +77,36 @@ const html = `<div class="aa">
         <div>tail</div>
     </div>
 </div>`
+
+let mockWorker
+const workerTmplJs = fs.readFileSync(path.join(__dirname, '../../mp-webpack-plugin/src/tmpl/worker.tmpl.js'))
+class MockWorker {
+    constructor() {
+        // eslint-disable-next-line no-new-func
+        const func = new Function('worker', workerTmplJs + (global.workerScript || ''))
+        func({
+            postMessage: data => {
+                if (this.cb) this.cb(data)
+            },
+
+            onMessage: cb => {
+                this.workerCb = cb
+            },
+        })
+    }
+
+    onMessage(cb) {
+        this.cb = cb
+    }
+
+    postMessage(data) {
+        if (this.workerCb) this.workerCb(data)
+    }
+
+    terminate() {
+        mockWorker = null
+    }
+}
 
 const storageMap = {}
 global.wx = {
@@ -164,10 +199,18 @@ global.wx = {
             complete()
         }
     },
-}
+    pageScrollTo(options) {
+        expect(options.duration).toBe(0)
+        expect(options.scrollTop).toBe(global.testScrollTop)
 
-const currentPages = []
-global.getCurrentPages = () => currentPages
+        global.testNextScrollTop = global.testScrollTop
+    },
+    createWorker() {
+        if (mockWorker) throw new Error('error')
+        mockWorker = new MockWorker()
+        return mockWorker
+    },
+}
 
 module.exports = {
     html,
@@ -178,7 +221,6 @@ module.exports = {
         res.window.$$miniprogram.init(realUrl)
         res.document.body.innerHTML = html
 
-        currentPages.push(res)
         return res
     },
     async sleep(time) {

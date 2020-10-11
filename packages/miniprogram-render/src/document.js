@@ -12,6 +12,8 @@ const Input = require('./node/element/input')
 const Textarea = require('./node/element/textarea')
 const Video = require('./node/element/video')
 const Canvas = require('./node/element/canvas')
+const Select = require('./node/element/select')
+const Option = require('./node/element/option')
 const NotSupport = require('./node/element/not-support')
 const WxComponent = require('./node/element/wx-component')
 const WxCustomComponent = require('./node/element/wx-custom-component')
@@ -24,15 +26,17 @@ const CONSTRUCTOR_MAP = {
     TEXTAREA: Textarea,
     VIDEO: Video,
     CANVAS: Canvas,
+    SELECT: Select,
+    OPTION: Option,
     'WX-COMPONENT': WxComponent,
 }
 const WX_COMPONENT_MAP = {}
 const WX_COMPONENT_LIST = [
-    'movable-view', 'cover-image', 'cover-view', 'movable-area', 'scroll-view', 'swiper', 'swiper-item', 'view',
+    'cover-image', 'cover-view', 'match-media', 'movable-area', 'movable-view', 'scroll-view', 'swiper', 'swiper-item', 'view',
     'icon', 'progress', 'rich-text', 'text',
     'button', 'checkbox', 'checkbox-group', 'editor', 'form', 'input', 'label', 'picker', 'picker-view', 'picker-view-column', 'radio', 'radio-group', 'slider', 'switch', 'textarea',
     'functional-page-navigator', 'navigator',
-    'audio', 'camera', 'image', 'live-player', 'live-pusher', 'video',
+    'audio', 'camera', 'image', 'live-player', 'live-pusher', 'video', 'voip-room',
     'map',
     'canvas',
     'ad', 'official-account', 'open-data', 'web-view',
@@ -99,13 +103,13 @@ class Document extends EventTarget {
             type: Node.DOCUMENT_NODE,
         })
         this.$_node.$$updateParent(this) // documentElement 的 parentNode 是 document
-        this.$_node.scrollTop = 0
 
         // head 元素
         this.$_head = this.createElement('head')
 
         // 更新 body 的 parentNode
         this.$_tree.root.$$updateParent(this.$_node)
+        this.$_node.$$children.push(this.$_tree.root)
 
         // 持久化 cookie
         if (cookieStore !== 'memory' && cookieStore !== 'globalmemory') {
@@ -303,31 +307,31 @@ class Document extends EventTarget {
     getElementsByTagName(tagName) {
         if (typeof tagName !== 'string') return []
 
-        return this.$_tree.getByTagName(tagName)
+        return this.$_tree.getByTagName(tagName, this.documentElement)
     }
 
     getElementsByClassName(className) {
         if (typeof className !== 'string') return []
 
-        return this.$_tree.getByClassName(className)
+        return this.$_tree.getByClassName(className, this.documentElement)
     }
 
     getElementsByName(name) {
         if (typeof name !== 'string') return []
 
-        return this.$_tree.query(`*[name=${name}]`)
+        return this.$_tree.query(`*[name=${name}]`, this.documentElement)
     }
 
     querySelector(selector) {
         if (typeof selector !== 'string') return
 
-        return this.$_tree.query(selector)[0] || null
+        return this.$_tree.query(selector, this.documentElement)[0] || null
     }
 
     querySelectorAll(selector) {
         if (typeof selector !== 'string') return []
 
-        return this.$_tree.query(selector)
+        return this.$_tree.query(selector, this.documentElement)
     }
 
     createElement(tagName) {

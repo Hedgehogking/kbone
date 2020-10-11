@@ -1,7 +1,9 @@
 const path = require('path')
 const mp = require('miniprogram-render')
-// eslint-disable-next-line import/no-extraneous-dependencies
 const simulate = require('miniprogram-simulate')
+
+// 屏蔽 console.warn
+global.console.warn = () => {}
 
 /**
  * 构建页面
@@ -96,13 +98,17 @@ function err(msg) {
 }
 
 /**
+ * 获取 data
+ */
+function getData(component) {
+    return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
+}
+simulate.getData = getData
+
+/**
  * 检查布尔值
  */
 simulate.checkBoolean = async function(component, node, attrName, attributeName, defaultValue) {
-    function getData(component) {
-        return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
-    }
-
     if (getData(component)[attrName] !== defaultValue) err(`${node.tagName}.${attrName}`)
     expect(getData(component)[attrName]).toBe(defaultValue)
 
@@ -131,10 +137,6 @@ simulate.checkBoolean = async function(component, node, attrName, attributeName,
  * 检查数字
  */
 simulate.checkNumber = async function(component, node, attrName, attributeName, defaultValue) {
-    function getData(component) {
-        return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
-    }
-
     if (getData(component)[attrName] !== defaultValue) err(`${node.tagName}.${attrName}`)
     expect(getData(component)[attrName]).toBe(defaultValue)
 
@@ -168,24 +170,21 @@ simulate.checkNumber = async function(component, node, attrName, attributeName, 
  * 检查字符串
  */
 simulate.checkString = async function(component, node, attrName, attributeName, defaultValue) {
-    function getData(component) {
-        return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
-    }
-
     if (getData(component)[attrName] !== defaultValue) err(`${node.tagName}.${attrName}`)
     expect(getData(component)[attrName]).toBe(defaultValue)
 
-    node.setAttribute(attributeName, '12345')
+    node.setAttribute(attributeName, 'abcde')
     await simulate.sleep(10)
-    if (getData(component)[attrName] !== '12345') err(`${node.tagName}.${attrName}`)
-    expect(getData(component)[attrName]).toBe('12345')
+    if (getData(component)[attrName] !== 'abcde') err(`${node.tagName}.${attrName}`)
+    expect(getData(component)[attrName]).toBe('abcde')
 
-    node.setAttribute(attributeName, '54321')
+    node.setAttribute(attributeName, 'fghij')
     await simulate.sleep(10)
-    if (getData(component)[attrName] !== '54321') err(`${node.tagName}.${attrName}`)
-    expect(getData(component)[attrName]).toBe('54321')
+    if (getData(component)[attrName] !== 'fghij') err(`${node.tagName}.${attrName}`)
+    expect(getData(component)[attrName]).toBe('fghij')
 
     node.setAttribute(attributeName, '')
+    defaultValue = defaultValue === undefined ? null : defaultValue
     await simulate.sleep(10)
     if (getData(component)[attrName] !== defaultValue) err(`${node.tagName}.${attrName}`)
     expect(getData(component)[attrName]).toBe(defaultValue)
@@ -195,10 +194,6 @@ simulate.checkString = async function(component, node, attrName, attributeName, 
  * 检查 url
  */
 simulate.checkUrl = async function(component, node, attrName, attributeName, defaultValue) {
-    function getData(component) {
-        return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
-    }
-
     if (getData(component)[attrName] !== defaultValue) err(`${node.tagName}.${attrName}`)
     expect(getData(component)[attrName]).toBe(defaultValue)
 
@@ -232,10 +227,6 @@ simulate.checkUrl = async function(component, node, attrName, attributeName, def
  * 检查数组
  */
 simulate.checkArray = async function(component, node, attrName, attributeName, defaultValue, testData) {
-    function getData(component) {
-        return component.data.childNodes && component.data.childNodes[0] && component.data.childNodes[0].extra || component.data
-    }
-
     expect(getData(component)[attrName]).toEqual(defaultValue)
 
     node.setAttribute(attributeName, testData)
@@ -247,6 +238,7 @@ simulate.checkArray = async function(component, node, attrName, attributeName, d
     expect(getData(component)[attrName]).toEqual([])
 
     node.setAttribute(attributeName, undefined)
+    defaultValue = defaultValue === undefined ? null : defaultValue
     await simulate.sleep(10)
     expect(getData(component)[attrName]).toEqual(defaultValue)
 }

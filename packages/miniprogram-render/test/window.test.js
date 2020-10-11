@@ -3,8 +3,7 @@ const mock = require('./mock')
 const Document = require('../src/document')
 const Location = require('../src/bom/location')
 const Navigator = require('../src/bom/navigator')
-const LocalStorage = require('../src/bom/local-storage')
-const SessionStorage = require('../src/bom/session-storage')
+const {SessionStorage, LocalStorage} = require('../src/bom/storage')
 const History = require('../src/bom/history')
 const Screen = require('../src/bom/screen')
 const XMLHttpRequest = require('../src/bom/xml-http-request')
@@ -104,6 +103,19 @@ test('window: $$getPrototype/$$extend/$$addAspect', () => {
     })
     expect(window.sessionStorage.testFunc()).toBe(window.sessionStorage)
     expect(window.sessionStorage.testStr).toBe('window.sessionStorage')
+
+    // window.XMLHttpRequest
+    let xhr = new window.XMLHttpRequest()
+    expect(window.$$getPrototype('window.XMLHttpRequest')).toBe(XMLHttpRequest.prototype)
+    window.$$extend('window.XMLHttpRequest', {
+        testStr: 'window.XMLHttpRequest',
+        testFunc() {
+            return this
+        },
+    })
+    xhr = new window.XMLHttpRequest()
+    expect(xhr.testFunc()).toBe(xhr)
+    expect(xhr.testStr).toBe('window.XMLHttpRequest')
 
     // window.event
     const evt = new window.CustomEvent('test')

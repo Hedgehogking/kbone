@@ -1,4 +1,6 @@
-module.exports = {	
+const path = require('path')
+
+module.exports = {
 	origin: 'https://test.miniprogram.com',	
 	entry: '/',	
 	router: {		
@@ -11,7 +13,9 @@ module.exports = {
 		accessDenied: 'index',
 	},
 	generate: {
-        appWxss: 'none',
+		appWxss: 'none',
+		renderVersion: 'latest',
+		elementVersion: 'latest',
 	},
 	runtime: {
 		// wxComponent: 'noprefix',
@@ -19,7 +23,15 @@ module.exports = {
 	},
 	app: {
 		navigationBarTitleText: 'miniprogram-project',
-	},	
+	},
+	global: {
+		windowScroll: true,
+		loadingView: path.join(__dirname, '../src/loading-view'),
+		loadingViewName: 'loading',
+	},
+	optimization: {
+		// setDataMode: 'original',
+	},
 	projectConfig: {
 		appid: '',
         projectname: 'kbone-demo3',

@@ -1,3 +1,4 @@
+const Location = require('./location')
 const EventTarget = require('../event/event-target')
 
 const SUPPORT_METHOD = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT']
@@ -67,6 +68,7 @@ class XMLHttpRequest extends EventTarget {
         this.$_response = null
         this.$_timeout = 0
         this.$_startTime = null
+        this.$_withCredentials = true // 向前兼容，默认为 true
 
         this.$_requestTask = null
         this.$_requestSuccess = this.$_requestSuccess.bind(this)
@@ -75,8 +77,8 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * readyState 变化
-   */
+     * readyState 变化
+     */
     $_callReadyStateChange(readyState) {
         const hasChange = readyState !== this.$_readyState
         this.$_readyState = readyState
@@ -85,9 +87,14 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * 执行请求
-   */
+     * 执行请求
+     */
     $_callRequest() {
+        if (!this.$_window || !this.$_window.document) {
+            console.warn('this page has been unloaded, so this request will be canceled.')
+            return
+        }
+
         if (this.$_timeout) {
             this.$_startTime = +new Date()
 
@@ -108,15 +115,18 @@ class XMLHttpRequest extends EventTarget {
         this.$_resHeader = null
         this.$_response = null
 
-        // 头信息
-        const header = Object.assign({}, this.$_header)
-        if (this.$_window) {
-            header.cookie = this.$_window.document.$$cookie
-        }
-
         // 补完 url
         let url = this.$_url
         url = url.indexOf('//') === -1 ? this.$_window.location.origin + url : url
+
+        // 头信息
+        const header = Object.assign({}, this.$_header)
+        header.cookie = this.$_window.document.$$cookie
+        if (!this.withCredentials) {
+            // 不同源，要求 withCredentials 为 true 才携带 cookie
+            const {origin} = Location.$$parse(url)
+            if (origin !== this.$_window.location.origin) delete header.cookie
+        }
 
         this.$_requestTask = wx.request({
             url,
@@ -132,9 +142,14 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * 请求成功
-   */
+     * 请求成功
+     */
     $_requestSuccess({data, statusCode, header}) {
+        if (!this.$_window || !this.$_window.document) {
+            console.warn('this page has been unloaded, so this request will be canceled.')
+            return
+        }
+
         this.$_status = statusCode
         this.$_resHeader = header
 
@@ -159,8 +174,8 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * 请求失败
-   */
+     * 请求失败
+     */
     $_requestFail({errMsg}) {
         this.$_status = 0
         this.$_statusText = errMsg
@@ -169,8 +184,8 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * 请求完成
-   */
+     * 请求完成
+     */
     $_requestComplete() {
         this.$_startTime = null
         this.$_requestTask = null
@@ -182,8 +197,8 @@ class XMLHttpRequest extends EventTarget {
     }
 
     /**
-   * 对外属性和方法
-   */
+     * 对外属性和方法
+     */
     get timeout() {
         return this.$_timeout
     }
@@ -228,6 +243,14 @@ class XMLHttpRequest extends EventTarget {
 
     get response() {
         return this.$_response
+    }
+
+    get withCredentials() {
+        return this.$_withCredentials
+    }
+
+    set withCredentials(value) {
+        this.$_withCredentials = !!value
     }
 
     abort() {
